@@ -1,0 +1,30 @@
+name: dp-opt sst2
+project: dp-opt
+command:
+- ${interpreter}
+- ${program}
+# method
+- "--ape_mode=iid_ibwd"
+- "--ensemble_gen=True"
+- "--ensemble_num=205"
+- "--gen_temp=1.1"
+- "--num_prompt=40"
+- "--max_new_tokens=50"
+# data
+- "--data=sst2"
+- "--holdout_ratio=0.01"
+- "--batch_size=12"
+# dp
+- "--target_eps=8."
+- "--dp_eps=1.8"
+- "--dp_delta=5e-7"
+- "--tokenwise_gen=True"
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: best_holdout_test_acc
+parameters:
+  seed:
+    values: [1,2,3]
+program: train_opt.py

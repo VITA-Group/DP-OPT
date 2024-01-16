@@ -1,0 +1,26 @@
+name: dln1 sst2
+project: dp-opt
+command:
+- ${interpreter}
+- ${program}
+# method
+- "--ape_mode=bwd"
+- "--gen_temp=0.7"
+- "--num_demos=20"
+- "--num_prompt=20"
+- "--rm_eval_item_name=True"
+- "--steps=20"
+- "--max_new_tokens=100"
+# data
+- "--data=sst2"
+- "--holdout_ratio=0.01"
+- "--batch_size=32"
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: best_holdout_test_acc
+parameters:
+  seed:
+    values: [1,2,3]
+program: train_opt.py
