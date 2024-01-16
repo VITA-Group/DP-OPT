@@ -3,7 +3,7 @@ DP-OPT: Make Large Language Model Your Privacy-Preserving Prompt Engineer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-Official PyTorch Code for Paper: "DP-OPT: Make Large Language Model Your Privacy-Preserving Prompt Engineer" [Junyuan Hong](https://jyhong.gitlab.io/), [Jiachen T. Wang](https://tianhaowang.netlify.app/), [Chenhui Zhang](https://scholar.google.com/citations?user=UYxdrBsAAAAJ&hl=en), Zhangheng Li, [Bo Li](https://aisecure.github.io/), [Zhangyang Wang](https://vita-group.github.io/), *Preprint* 2023.
+Official PyTorch Code for Paper: "DP-OPT: Make Large Language Model Your Privacy-Preserving Prompt Engineer" [Junyuan Hong](https://jyhong.gitlab.io/), [Jiachen T. Wang](https://tianhaowang.netlify.app/), [Chenhui Zhang](https://scholar.google.com/citations?user=UYxdrBsAAAAJ&hl=en), Zhangheng Li, [Bo Li](https://aisecure.github.io/), [Zhangyang Wang](https://vita-group.github.io/), *ICLR* 2024.
 
 [paper](https://arxiv.org/abs/2312.03724) / [code](https://github.com/VITA-Group/DP-OPT) / [blog](https://jyhong.gitlab.io/publication/2023dp_opt/)
 
