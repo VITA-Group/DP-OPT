@@ -49,7 +49,6 @@ if __name__ == '__main__':
     else:
         instruct_type, template, _ = get_eval_template(
             args.test_model if args.test_model not in openai_model_types else 'openai', args.data, 
-            instruct_type=args.instruct_type,
             add_item_name=not (args.rm_eval_item_name or args.test_rm_eval_item_name))
 
     instructs_to_eval = {}
