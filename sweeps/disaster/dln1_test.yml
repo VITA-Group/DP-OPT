@@ -1,0 +1,36 @@
+name: dln1 disaster test
+project: private_prompt
+command:
+- ${interpreter}
+- ${program}
+# method
+- "--ape_mode=bwd"
+- "--gen_temp=0.7"
+- "--num_demos=20"
+- "--num_prompt=20"
+- "--rm_eval_item_name=True"
+- "--steps=20"
+- "--max_new_tokens=100"
+# data
+- "--data=disaster"
+# test 
+- "--test_batch_size=4"
+# - "--test_batch_size=1"
+- ${args}
+method: grid
+metric:
+  goal: maximize
+  name: test acc
+parameters:
+  seed:
+    values: [1,2,3]
+  test_model:
+    values:
+      - text-davinci-003
+      # - lmsys/vicuna-7b-v1.3
+      # - lmsys/vicuna-13b-v1.3
+      # - lmsys/vicuna-33b-v1.3
+      # - meta-llama/Llama-2-7b-chat-hf
+      # - meta-llama/Llama-2-13b-chat-hf
+      # - meta-llama/Llama-2-70b-chat-hf
+program: eval_opt.py
