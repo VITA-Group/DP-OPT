@@ -72,6 +72,8 @@ We use `sweeps/<data_name>/<method>_test.yml` to test prompts on different model
 
 Supported datasets: `sst2`, `trec`, `mpqa`, `disaster`.
 
+![image](https://github.com/VITA-Group/DP-OPT/assets/6964516/8040b268-1c19-4d5a-8583-44ed23a0a090)
+
 Methods (exmaplified on `sst2`):
 * 5-shot In-Context Learning (ICL)
 ```shell
