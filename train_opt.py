@@ -25,6 +25,7 @@ def config_args(parser: argparse.ArgumentParser):
     parser.add_argument('--seed', default=0, type=int, help='random seed')
     parser.add_argument('--data', default='sst2', choices=['sst2', 'trec', 'disaster', 'mpqa'])
     parser.add_argument('--model', default='lmsys/vicuna-7b-v1.3', help="model for generating prompts.")
+    parser.add_argument('--instruct_type', default='vicuna', type=str, help='instruction format.')
     parser.add_argument('--batch_size', default=8, type=int, help="batch size for evaluation")
     parser.add_argument('--holdout_ratio', default=0.01, type=float, help='ratio of training data to be held out for validation.')
     parser.add_argument('--test_ratio', default=1., type=float, help='ratio of testing data to be used.')
@@ -171,7 +172,7 @@ def main(arg_list=None):
 
     # Prepare evaluator
     instruct_type, eval_template, init_instruct = get_eval_template(
-        args.model, args.data, add_item_name=not args.rm_eval_item_name)
+        args.model, args.data, add_item_name=not args.rm_eval_item_name, instruct_type=args.instruct_type)
     evaluator = Evaluator(eval_template, label_words, model, tokenizer, dataset, args.batch_size, device=args.device)
     
     # Prepare instruction generator.

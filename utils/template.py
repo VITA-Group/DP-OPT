@@ -226,6 +226,9 @@ def get_eval_template(instruct_model, data_name, instruct_type='default', add_it
         if 'vicuna' in instruct_model or instruct_model == 'openai' or 'llama-2' in instruct_model \
             or 'llama2' in instruct_model or 'mistral' in instruct_model:
             instruct_type = 'vicuna'
+        elif 'llama3' in instruct_model or 'llama-3' in instruct_model:
+            # instruct_type = 'llama-3'  # not work well.
+            instruct_type = 'vicuna'
         print(f"Choose instruct default template ({instruct_type}) for model.")
     
     if instruct_type == "vicuna":
@@ -238,8 +241,13 @@ def get_eval_template(instruct_model, data_name, instruct_type='default', add_it
             eval_template = TempClass('[INST] [PROMPT] [/INST]\n\nInput: [INPUT]\n\nOutput: [OUTPUT]')
         else:
             eval_template = TempClass('[PROMPT]\n\n[INPUT]\n\nOutput: [OUTPUT]')
+    elif instruct_type == 'llama-3':
+        if add_item_name:
+            eval_template = TempClass('<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\n<|begin_of_text|> [PROMPT] <|eot_id|>\n\n<|start_header_id|>user<|end_header_id|>\n\n[INPUT]\n\n<|eot_id|><|start_header_id|>assistant<|end_header_id|>[OUTPUT]')
+        else:
+            eval_template = TempClass('[PROMPT]\n\n[INPUT]\n\nOutput: [OUTPUT]')
     else:
-        raise NotImplementedError(f"Unknown model: {instruct_model}")
+        raise NotImplementedError(f"Unknown instruct_type: {instruct_type}")
     return instruct_type, eval_template, TempClass.init_instruct
 
 

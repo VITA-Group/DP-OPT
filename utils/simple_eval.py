@@ -20,10 +20,6 @@ except:
 
 def evaluate_prompt(best_gen_instruct, arg_list=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mode', default='resume_best_gen',
-                        choices=['resume_best_gen', 'manual', 
-                                 'ICL', 'empty', 'init_instruct'],
-                        help='select prompt to evaluate')
     parser.add_argument('--test_model', default='lmsys/vicuna-13b-v1.3')
     parser.add_argument('--test_batch_size', default=8, type=int)
     config_args(parser)
@@ -41,16 +37,14 @@ def evaluate_prompt(best_gen_instruct, arg_list=None):
     set_seed(args.seed)
     rng = np.random.RandomState(args.seed)
 
-    render_runname(args)
+    # render_runname(args)
     
     # load data
     dataset, label_words = get_dataset(args.data, args.holdout_ratio, args.test_ratio, rng)
-    if args.mode in 'empty':
-        template = get_zeroshot_template(args.data)
-    else:
-        instruct_type, template, _ = get_eval_template(
-            args.test_model if args.test_model not in openai_model_types else 'openai', args.data, 
-            add_item_name=not (args.rm_eval_item_name or args.test_rm_eval_item_name))
+    instruct_type, template, _ = get_eval_template(
+        args.test_model if args.test_model not in openai_model_types else 'openai', args.data, 
+        add_item_name=not (args.rm_eval_item_name or args.test_rm_eval_item_name),
+        instruct_type=args.instruct_type)
 
     instructs_to_eval = {}
     instructs_to_eval['user def'] = best_gen_instruct
@@ -81,7 +75,8 @@ def evaluate_prompt(best_gen_instruct, arg_list=None):
     template.prompt = instruct
     evaluator = Evaluator(template, label_words, model, tokenizer, dataset, args.test_batch_size, is_openai_model=is_openai_model, device=args.device)
 
-    print(f"Example:\n{template.fill(input=dataset['validation'][0][template.input_key], output='')}")
+    example_query = template.fill(input=dataset['validation'][0][template.input_key], output='')
+    print(f"Example:\n{example_query}")
 
     # Evaluate on test set
     acc, loss, te_losses, *_ = evaluator.evaluate_prompt(
@@ -89,4 +84,4 @@ def evaluate_prompt(best_gen_instruct, arg_list=None):
         no_parallel=args.no_parallel, add_special_tokens=args.add_special_tokens)
     print(f"({i_inst}) Instruct {name} | Accuracy: {acc:.3f} | Loss: {loss:.3f}")
     
-    return acc
+    return acc, example_query

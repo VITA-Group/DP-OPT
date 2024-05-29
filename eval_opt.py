@@ -50,7 +50,8 @@ if __name__ == '__main__':
     else:
         instruct_type, template, _ = get_eval_template(
             args.test_model if args.test_model not in openai_model_types else 'openai', args.data, 
-            add_item_name=not (args.rm_eval_item_name or args.test_rm_eval_item_name))
+            add_item_name=not (args.rm_eval_item_name or args.test_rm_eval_item_name),
+            instruct_type=args.instruct_type)
 
     instructs_to_eval = {}
     if args.mode == 'resume_best_gen':
