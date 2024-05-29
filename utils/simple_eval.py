@@ -15,6 +15,7 @@ try:
     from openai_config import openai_model_types
 except:
     print(f"Fail to load openai config. you may not use OpenAI models.")
+    openai_model_types = []
 
 
 def evaluate_prompt(best_gen_instruct, arg_list=None):

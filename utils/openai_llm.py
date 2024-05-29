@@ -4,7 +4,11 @@ import os
 import time
 from tqdm import tqdm
 from abc import ABC, abstractmethod
-from openai_config import client
+try:
+    from openai_config import client
+except:
+    print(f"Fail to load openai config. you may not use OpenAI models.")
+    client = None
 
 gpt_costs_per_thousand = {
     'davinci': 0.0200,
