@@ -66,6 +66,13 @@ python eval_opt.py --ape_mode=iid_ibwd --ensemble_gen=True --gen_temp=1.1 --num_
 --test_model=text-davinci-003
 ```
 
+Do prompt engineer on website:
+```shell
+pip install gradio
+python web_demo.py
+# open http://127.0.0.1:7860
+```
+
 ## Experiments
 
 Wandb sweeps files are under `sweeps/<data_name>/<method>.yml`.

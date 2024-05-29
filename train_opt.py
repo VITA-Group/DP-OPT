@@ -85,7 +85,7 @@ def render_runname(args):
     args.save_file = os.path.join(args.save_path, f"auto_prompt.pth")
 
 
-def print_estimate_dp():
+def print_estimate_dp(dp_engine, val_dp_engine):
     print(f"DP configurations:")
     print(f"- generation dp")
     # estimate max dp expense based on estimated queries.
@@ -105,8 +105,7 @@ def print_estimate_dp():
     val_eps, val_delta = val_dp_engine.get_dp_expense(1, 1)
     print(f"  estimated val eps: eps={val_eps:.3f} delta={val_delta:g}")
 
-
-if __name__ == '__main__':
+def main(arg_list=None):
     parser = argparse.ArgumentParser()
     # device
     parser.add_argument('--device', default='cuda')
@@ -114,8 +113,12 @@ if __name__ == '__main__':
 
     parser.add_argument('--skip_eval', action='store_true', help='skip eval on holdout (and ranking) to save time')
     config_args(parser)
-    args = parser.parse_args()
-
+    global args
+    if arg_list is not None:
+        args = parser.parse_args(arg_list)
+    else:
+        args = parser.parse_args()
+    
     set_seed(args.seed)
     rng = np.random.RandomState(args.seed)
 
@@ -147,7 +150,7 @@ if __name__ == '__main__':
             fail_mode='retry')
         val_dp_engine = ExpMechanism(args.target_eps, 
                                      target_eps=args.target_eps, target_delta=args.target_delta)
-        print_estimate_dp()
+        print_estimate_dp(dp_engine, val_dp_engine)
     else:
         dp_engine = None
         val_dp_engine = None
@@ -280,4 +283,8 @@ if __name__ == '__main__':
             if do_early_stop_cnt == 0:
                 print(f"Early stop at step {step}/{args.steps}...")
                 break
+    return best_save_dict, save_dict
 
+
+if __name__ == '__main__':
+    main()
