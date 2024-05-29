@@ -156,9 +156,12 @@ def main(arg_list=None):
         val_dp_engine = None
 
     # Load model
-    model = AutoModelForCausalLM.from_pretrained(args.model, device_map='auto', low_cpu_mem_usage=True,
-                                                 **{'torch_dtype': torch.float16,
-                                                    'revision': 'main'})
+    model_args = {'revision': 'main'}
+    if args.device == 'cuda':
+        model_args['device_map'] = 'auto'
+        model_args['torch_dtype'] = torch.float16
+    model = AutoModelForCausalLM.from_pretrained(args.model, low_cpu_mem_usage=True,
+                                                 **model_args)
     tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False, revision='main')
     if 'gpt2' in args.model or 'llama' in args.model.lower():
         tokenizer.pad_token = tokenizer.eos_token
@@ -169,7 +172,7 @@ def main(arg_list=None):
     # Prepare evaluator
     instruct_type, eval_template, init_instruct = get_eval_template(
         args.model, args.data, add_item_name=not args.rm_eval_item_name)
-    evaluator = Evaluator(eval_template, label_words, model, tokenizer, dataset, args.batch_size)
+    evaluator = Evaluator(eval_template, label_words, model, tokenizer, dataset, args.batch_size, device=args.device)
     
     # Prepare instruction generator.
     if args.ape_mode in ['bwd', 'iid_ibwd']:

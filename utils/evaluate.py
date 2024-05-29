@@ -52,7 +52,7 @@ def openai_complete(instruct_model, prompt, n, max_tokens=50):
     return response['choices']
 
 
-def eval_logprobs(model, tokenizer, texts, candidate_texts, max_tokens, no_parallel=False, add_special_tokens=True):
+def eval_logprobs(model, tokenizer, texts, candidate_texts, max_tokens, no_parallel=False, add_special_tokens=True, device='cuda'):
     """Evaluate the logprobs of targets.
 
     Input:
@@ -65,8 +65,8 @@ def eval_logprobs(model, tokenizer, texts, candidate_texts, max_tokens, no_paral
     prompt_ids = tokenizer(texts, padding=True, add_special_tokens=add_special_tokens).input_ids
 
     inputs = tokenizer(candidate_texts, padding=True, return_tensors="pt", add_special_tokens=add_special_tokens)
-    input_ids = inputs.input_ids.to('cuda')
-    attention_mask = inputs.attention_mask.to('cuda')
+    input_ids = inputs.input_ids.to(device)
+    attention_mask = inputs.attention_mask.to(device)
     option_lens = [len(i) - len(p) for p, i in zip(prompt_ids, input_ids)]
 
     if len(input_ids[0]) >= max_tokens:
@@ -143,7 +143,7 @@ def evaluate_target_logprob_openai(
 
 class Evaluator(object):
     """Evaluate and find the best instruct."""
-    def __init__(self, eval_template, label_words, model, tokenizer, dataset, batch_size, max_tokens=2048, is_openai_model=False) -> None:
+    def __init__(self, eval_template, label_words, model, tokenizer, dataset, batch_size, max_tokens=2048, is_openai_model=False, device='cuda') -> None:
         self.eval_template = eval_template
         self.label_words = label_words
         self.model = model
@@ -152,6 +152,7 @@ class Evaluator(object):
         self.batch_size = batch_size
         self.max_tokens = max_tokens
         self.is_openai_model = is_openai_model
+        self.device = device
 
     def batch_eval_prompt(self, texts, candidate_texts, labels, **kwargs):
         batch_size = len(texts)
@@ -204,7 +205,7 @@ class Evaluator(object):
 
             batch_losses, pred_labels = self.batch_eval_prompt(
                 batch['text'], batch['candidate_texts'], batch['labels'],
-                **kwargs)
+                device=self.device, **kwargs)
 
             # print(f"pred_labels: {pred_labels}")
             # print(f"targets: {targets}")

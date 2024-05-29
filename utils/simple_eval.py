@@ -60,9 +60,12 @@ def evaluate_prompt(best_gen_instruct, arg_list=None):
         model = args.test_model
         tokenizer = None
     else:
-        model = AutoModelForCausalLM.from_pretrained(args.test_model, device_map='auto', low_cpu_mem_usage=True,
-                                                     **{'torch_dtype': torch.float16,
-                                                        'revision': 'main'})  # 'max_memory': {0: '24GiB', 1: '24GiB', 2: '24GiB', 3: '24GiB', 4: '24GiB', 5: '24GiB', 6: '24GiB', 7: '24GiB'},
+        model_args = {'revision': 'main'}
+        if args.device == 'cuda':
+            model_args['device_map'] = 'auto'
+            model_args['torch_dtype'] = torch.float16
+        model = AutoModelForCausalLM.from_pretrained(args.test_model, low_cpu_mem_usage=True,
+                                                     **model_args)
         tokenizer = AutoTokenizer.from_pretrained(args.test_model, use_fast=False, revision='main')
         tokenizer.padding_side = 'left'
         tokenizer.truncation_side = 'left'
@@ -75,7 +78,7 @@ def evaluate_prompt(best_gen_instruct, arg_list=None):
         break
 
     template.prompt = instruct
-    evaluator = Evaluator(template, label_words, model, tokenizer, dataset, args.test_batch_size, is_openai_model=is_openai_model)
+    evaluator = Evaluator(template, label_words, model, tokenizer, dataset, args.test_batch_size, is_openai_model=is_openai_model, device=args.device)
 
     print(f"Example:\n{template.fill(input=dataset['validation'][0][template.input_key], output='')}")
 
@@ -85,4 +88,4 @@ def evaluate_prompt(best_gen_instruct, arg_list=None):
         no_parallel=args.no_parallel, add_special_tokens=args.add_special_tokens)
     print(f"({i_inst}) Instruct {name} | Accuracy: {acc:.3f} | Loss: {loss:.3f}")
     
-    return acc, loss
+    return acc
