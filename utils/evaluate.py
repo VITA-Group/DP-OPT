@@ -10,7 +10,6 @@ import time
 from .openai_llm import GPT_Forward
 from utils.dp import ExpMechanism
 
-import openai
 
 from .template import DataCollatorWithOptAndTemplate
 from torch.utils.data import DataLoader
@@ -34,12 +33,13 @@ def openai_complete(instruct_model, prompt, n, max_tokens=50):
         "frequency_penalty": 0.0,
         "presence_penalty": 0.0,
     }
+    from openai_config import client
     config['n'] = n
     response = None
     max_retry = 3
     while response is None:
         try:
-            response = openai.Completion.create(
+            response = client.completions.create(
                 **config, prompt=prompt)
         except Exception as e:
             print(e)
