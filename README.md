@@ -41,6 +41,8 @@ openai.api_key = "<your-key>"
 openai.api_base = "https://api.openai.com/v1"
 openai_model_types = ['text-davinci-003']
 ```
+> :warning: **Warning:** Setting `echo` and `logprobs` simultaneously is no longer supported for certain OpenAI models.
+> However, classification inference with openai models requires both settings. Consider to host your own models, e.g., thru vLLM, instead.
 
 **Example**: Do prompt engineer on website:
 ```shell
