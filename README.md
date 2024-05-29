@@ -51,7 +51,7 @@ python web_demo.py
 # open http://127.0.0.1:7860
 ```
 
-**Example**: Use local model (`lmsys/vicuna-7b-v1.3`) to generate a instruction and test the instruction by OpenAI model (`text-davinci-003`).
+**Example**: Use local model (`lmsys/vicuna-7b-v1.3`) to generate an instruction and test the instruction by OpenAI model (`text-davinci-003`).
 * OPT:
 ```shell
 # generate a instruction
