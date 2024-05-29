@@ -42,6 +42,13 @@ openai.api_base = "https://api.openai.com/v1"
 openai_model_types = ['text-davinci-003']
 ```
 
+**Example**: Do prompt engineer on website:
+```shell
+pip install gradio
+python web_demo.py
+# open http://127.0.0.1:7860
+```
+
 **Example**: Use local model (`lmsys/vicuna-7b-v1.3`) to generate a instruction and test the instruction by OpenAI model (`text-davinci-003`).
 * OPT:
 ```shell
@@ -64,13 +71,6 @@ python eval_opt.py --ape_mode=iid_ibwd --ensemble_gen=True --gen_temp=1.1 --num_
 --data=sst2 \
 --target_eps=8. --dp_eps=1.8 --dp_delta=5e-7 --tokenwise_gen=True \
 --test_model=text-davinci-003
-```
-
-Do prompt engineer on website:
-```shell
-pip install gradio
-python web_demo.py
-# open http://127.0.0.1:7860
 ```
 
 ## Experiments
