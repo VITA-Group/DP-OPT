@@ -51,6 +51,10 @@ python web_demo.py
 # open http://127.0.0.1:7860
 ```
 
+| Train | Test |
+| :---- | :--- |
+| ![](https://github.com/VITA-Group/DP-OPT/assets/6964516/fabcb8a1-65c9-4d6f-ac4f-e1274ad85b51) | ![](https://github.com/VITA-Group/DP-OPT/assets/6964516/12982a66-dcb0-4e77-ae69-be9eec87db07") |
+
 **Example**: Use local model (`lmsys/vicuna-7b-v1.3`) to generate a instruction and test the instruction by OpenAI model (`text-davinci-003`).
 * OPT:
 ```shell
